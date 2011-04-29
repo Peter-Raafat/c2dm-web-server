@@ -1,16 +1,19 @@
 import unittest
+
 from mockito import mock, when, verify
-from c2dm import *
 
-from device_registry import DeviceNotRegisterdError
+from c2dm import (RegistrationRequest, RegistrationHandler, MDSWakeupHandler,
+                  C2DMServiceTemporarilyUnavailableError)
+from device_registry import DeviceNotRegisteredError
 
-class  RegistrationHandlerTestCase(unittest.TestCase):
+
+class RegistrationHandlerTestCase(unittest.TestCase):
 
     node_id = "fcc1bf7e0ff1b0dd"
     registration_id = "mock_registration_id"
     device_registry = mock()
     registration_request = RegistrationRequest(node_id, registration_id)
-    
+
     def test_handle_registration(self):
         handler = RegistrationHandler(self.device_registry)
         handler.handle_registration(self.registration_request)
@@ -19,9 +22,11 @@ class  RegistrationHandlerTestCase(unittest.TestCase):
 
     def test_handle_registration_id_change(self):
         handler = RegistrationHandler(self.device_registry)
-        handler.handle_registration_id_change_for_node(self.registration_request)
+        handler.handle_registration_id_change_for_node(
+                self.registration_request)
         verify(self.device_registry).change_registration_id_for_node(
                 self.node_id, self.registration_id)
+
 
 class MDSWakeupHandlerTestCase(unittest.TestCase):
 
@@ -36,11 +41,11 @@ class MDSWakeupHandlerTestCase(unittest.TestCase):
         self.assertTrue(self.wakeup_handler.wakeup_mds(self._mds))
 
     def test_wakeup_for_unregisterd_mds(self):
-        when(self.device_registry).lookup_registration_id_for_mds(self._mds).thenRaise(DeviceNotRegisterdError('Device not found'))
+        when(self.device_registry).lookup_registration_id_for_mds(self._mds).thenRaise(DeviceNotRegisteredError('Device not found'))
         try:
             self.wakeup_handler.wakeup_mds(self._mds)
-            self.fail('Expected DeviceNotRegisterdError')
-        except DeviceNotRegisterdError:
+            self.fail('Expected DeviceNotRegisteredError')
+        except DeviceNotRegisteredError:
             None
 
     def test_wakeup_when_c2dm_service_is_down(self):
@@ -48,10 +53,9 @@ class MDSWakeupHandlerTestCase(unittest.TestCase):
         when(self.c2dm_service_facade).request_wakeup_of_mds(self._registration_id).thenRaise(C2DMServiceTemporarilyUnavailableError("C2DM Returned a 503"))
         try:
             self.wakeup_handler.wakeup_mds(self._mds)
-            self.fail('Expceted C2DMServiceTemporarilyUnavailableError')
+            self.fail('Expected C2DMServiceTemporarilyUnavailableError')
         except C2DMServiceTemporarilyUnavailableError:
             None
 
 if __name__ == '__main__':
     unittest.main()
-

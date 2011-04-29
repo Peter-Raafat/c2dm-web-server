@@ -39,7 +39,8 @@ class  DeviceRegistryTestCase(unittest.TestCase):
         registry.save_device_registration("node2", "registration2")
         node_to_be_found = "node"
         registry_key_to_return = "registry"
-        registry.save_device_registration(node_to_be_found, registry_key_to_return)
+        registry.save_device_registration(node_to_be_found,
+                                          registry_key_to_return)
         self.assertEqual(
                 registry.lookup_registration_id_for_mds(node_to_be_found),
                 registry_key_to_return)
@@ -47,7 +48,8 @@ class  DeviceRegistryTestCase(unittest.TestCase):
     def tearDown(self):
         os.remove(self.file_name)
 
-class  ValueParserTest(unittest.TestCase):
+
+class ValueParserTest(unittest.TestCase):
     parser = ValueParser()
 
     def test_that_value_is_replaced(self):

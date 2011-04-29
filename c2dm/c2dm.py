@@ -1,9 +1,10 @@
 from device_registry import DeviceRegistry
 from c2dm_service_facade import C2DMServiceFacade
 
+
 class RegistrationHandler:
-    
-    def __init__(self, device_registry = DeviceRegistry()):
+
+    def __init__(self, device_registry=DeviceRegistry()):
         self.device_registry = device_registry
 
     def handle_registration(self, registration_request):
@@ -16,8 +17,9 @@ class RegistrationHandler:
             registration_request.node_id(),
             registration_request.registration_id())
 
+
 class RegistrationRequest:
-        
+
     def __init__(self, node_id, registration_id):
         self._node_id = node_id
         self._registration_id = registration_id
@@ -31,14 +33,16 @@ class RegistrationRequest:
 
 class MDSWakeupHandler:
 
-    def __init__(self, c2dm_service_facade = C2DMServiceFacade(), device_registry = DeviceRegistry()):
+    def __init__(self, c2dm_service_facade=C2DMServiceFacade(),
+                 device_registry=DeviceRegistry()):
         self._device_registry = device_registry
         self._c2dm_service_facade = c2dm_service_facade
 
     def wakeup_mds(self, mds):
-        registration_id = self._device_registry.lookup_registration_id_for_mds(mds)
-        self._c2dm_service_facade.request_wakeup_of_mds(registration_id)
+        reg_id = self._device_registry.lookup_registration_id_for_mds(mds)
+        self._c2dm_service_facade.request_wakeup_of_mds(reg_id)
         return True
+
 
 class C2DMServiceTemporarilyUnavailableError(Exception):
 

@@ -2,10 +2,10 @@ import csv
 
 
 class DeviceRegistry():
-    
+
     csv_dialect = csv.excel
 
-    def __init__(self, registry_file_name = 'registry.csv'):
+    def __init__(self, registry_file_name='registry.csv'):
         self.registry_file_name = registry_file_name
 
     def save_device_registration(self, node_id, registration_id):
@@ -34,21 +34,23 @@ class DeviceRegistry():
         file = open(self.registry_file_name, 'r')
         reader = csv.reader(file, self.csv_dialect)
         for row in reader:
-            if(mds == row[0]):
+            if mds == row[0]:
                 file.close()
                 return row[1]
         file.close()
 
 
 class ValueParser():
-    
+
     def replace_value_if_key_matches(self, values_pair, key, new_value):
-        if(values_pair[0] == key):
-            return (key, new_value)
+        if values_pair[0] == key:
+            return key, new_value
+
         return values_pair
 
-class DeviceNotRegisterdError(Exception):
-    
+
+class DeviceNotRegisteredError(Exception):
+
     def __init__(self, value):
         self.value = value
 
