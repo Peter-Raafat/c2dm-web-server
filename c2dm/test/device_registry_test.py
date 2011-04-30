@@ -2,7 +2,7 @@ import csv
 import unittest
 import os
 
-from device_registry import DeviceRegistry, ValueParser
+from c2dm.device_registry import DeviceRegistry, ValueParser
 
 
 class  DeviceRegistryTestCase(unittest.TestCase):
@@ -65,6 +65,3 @@ class ValueParserTest(unittest.TestCase):
                 'old',
                 self.parser.replace_value_if_key_matches(
                         value, 'otherkey', 'somevalue')[1])
-
-if __name__ == '__main__':
-    unittest.main()

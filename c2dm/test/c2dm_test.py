@@ -2,13 +2,13 @@ import unittest
 
 from mockito import mock, when, verify
 
-from c2dm import (RegistrationRequest, RegistrationHandler, MDSWakeupHandler,
-                  C2DMServiceTemporarilyUnavailableError)
-from device_registry import DeviceNotRegisteredError
+from c2dm.c2dm import (RegistrationRequest, RegistrationHandler,
+                       MDSWakeupHandler,
+                       C2DMServiceTemporarilyUnavailableError)
+from c2dm.device_registry import DeviceNotRegisteredError
 
 
 class RegistrationHandlerTestCase(unittest.TestCase):
-
     node_id = "fcc1bf7e0ff1b0dd"
     registration_id = "mock_registration_id"
     device_registry = mock()
@@ -29,7 +29,6 @@ class RegistrationHandlerTestCase(unittest.TestCase):
 
 
 class MDSWakeupHandlerTestCase(unittest.TestCase):
-
     device_registry = mock()
     c2dm_service_facade = mock()
     wakeup_handler = MDSWakeupHandler(c2dm_service_facade, device_registry)
@@ -56,6 +55,3 @@ class MDSWakeupHandlerTestCase(unittest.TestCase):
             self.fail('Expected C2DMServiceTemporarilyUnavailableError')
         except C2DMServiceTemporarilyUnavailableError:
             None
-
-if __name__ == '__main__':
-    unittest.main()

@@ -1,11 +1,9 @@
-import unittest
-
 from mockito import mock, verify, any, when
 from tornado.testing import AsyncHTTPTestCase, LogTrapTestCase
 
-from wakeup_mds_service import WakeupMDSApplications
-from c2dm import RegistrationRequest, C2DMServiceTemporarilyUnavailableError
-from device_registry import DeviceNotRegisteredError
+from c2dm.wakeup_mds_service import WakeupMDSApplications
+from c2dm.c2dm import RegistrationRequest, C2DMServiceTemporarilyUnavailableError
+from c2dm.device_registry import DeviceNotRegisteredError
 
 
 class WakeupMDSServiceTest(AsyncHTTPTestCase, LogTrapTestCase):
@@ -57,6 +55,3 @@ class WakeupMDSServiceTest(AsyncHTTPTestCase, LogTrapTestCase):
         self.http_client.fetch(self.get_url(self._successful_wakeup_url), self.stop)
         response = self.wait()
         self.assertEqual(self._http_temporarily_unavailable_code, response.code)
-
-if __name__ == '__main__':
-    unittest.main()
